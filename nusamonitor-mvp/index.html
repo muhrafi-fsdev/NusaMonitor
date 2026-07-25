@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#07111f">
+  <meta name="description" content="NusaMonitor adalah prototype dashboard intelijen global dan Indonesia.">
+  <title>NusaMonitor — Global Intelligence Dashboard</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <noscript><div class="noscript">NusaMonitor membutuhkan JavaScript.</div></noscript>
+
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand-block">
+        <button class="mobile-menu-button" id="mobile-menu-button" type="button" aria-label="Buka menu">☰</button>
+        <div class="brand-mark"><span></span><strong>N</strong></div>
+        <div>
+          <div class="brand-row"><h1>NusaMonitor</h1><em>MVP</em></div>
+          <p>Global Intelligence &amp; Situational Awareness</p>
+        </div>
+      </div>
+
+      <label class="search-box">
+        <span>⌕</span>
+        <input id="global-search" type="search" placeholder="Cari negara, kategori, atau event...">
+        <kbd>/</kbd>
+      </label>
+
+      <div class="system-status">
+        <div><i></i><span>DEMO FEED</span></div>
+        <div class="hide-small"><span>UTC</span><strong id="utc-clock">00:00:00</strong></div>
+        <button class="icon-button" id="refresh-button" type="button" aria-label="Refresh">↻</button>
+      </div>
+    </header>
+
+    <aside class="sidebar" id="sidebar">
+      <section>
+        <p class="sidebar-label">MONITORING LAYERS</p>
+        <div class="layer-list" id="layer-list"></div>
+      </section>
+
+      <section>
+        <p class="sidebar-label">RISK OVERVIEW</p>
+        <div class="risk-card">
+          <div class="risk-head"><span>Global Risk Index</span><strong id="risk-score">68</strong></div>
+          <div class="risk-track"><span id="risk-fill"></span></div>
+          <div class="risk-scale"><span>LOW</span><span>GUARDED</span><span>HIGH</span></div>
+        </div>
+      </section>
+
+      <section>
+        <p class="sidebar-label">ACTIVE SIGNALS</p>
+        <div class="signal-list">
+          <div><i class="critical"></i><span>Critical</span><strong id="critical-count">0</strong></div>
+          <div><i class="high"></i><span>High</span><strong id="high-count">0</strong></div>
+          <div><i class="medium"></i><span>Medium</span><strong id="medium-count">0</strong></div>
+          <div><i class="low"></i><span>Low</span><strong id="low-count">0</strong></div>
+        </div>
+      </section>
+
+      <footer><span>MRP INTELLIGENCE LAB</span><span>v0.1.0</span></footer>
+    </aside>
+
+    <main class="workspace">
+      <section class="map-stage">
+        <div id="map"></div>
+
+        <div class="map-header-overlay">
+          <div><p class="eyebrow">LIVE SITUATIONAL MAP</p><h2 id="map-title">All Intelligence Layers</h2></div>
+          <div class="map-stats">
+            <span><strong id="visible-event-count">0</strong> events</span>
+            <span><strong id="country-count">0</strong> regions</span>
+          </div>
+        </div>
+
+        <div class="map-controls">
+          <button id="focus-indonesia" type="button">◎ Indonesia</button>
+          <button id="focus-world" type="button">◉ Global</button>
+          <button id="toggle-pulse" type="button" aria-pressed="true">◌ Pulse</button>
+        </div>
+
+        <div class="timeline-panel">
+          <div><span>EVENT TIMELINE</span><strong id="timeline-label">Last 24 hours</strong></div>
+          <input id="timeline-range" type="range" min="6" max="72" value="24" step="6">
+          <p><span>6H</span><span>24H</span><span>48H</span><span>72H</span></p>
+        </div>
+
+        <div class="selected-event-panel" id="selected-event-panel">
+          <button id="close-event-panel" type="button">×</button>
+          <p class="eyebrow" id="selected-category">EVENT DETAIL</p>
+          <h3 id="selected-title">Pilih marker pada peta</h3>
+          <p id="selected-summary">Detail event akan ditampilkan di sini.</p>
+          <div class="event-meta" id="selected-meta"></div>
+        </div>
+      </section>
+
+      <aside class="intel-panel">
+        <section>
+          <div class="section-title-row">
+            <div><p class="eyebrow">AI SYNTHESIS</p><h2>Situation Brief</h2></div>
+            <span class="live-chip">AUTO</span>
+          </div>
+          <p class="ai-brief" id="ai-brief"></p>
+          <div class="confidence-row"><span>Signal confidence</span><strong id="confidence-value">84%</strong></div>
+        </section>
+
+        <section>
+          <div class="section-title-row">
+            <div><p class="eyebrow">INTELLIGENCE STREAM</p><h2>Latest Signals</h2></div>
+            <select id="feed-filter">
+              <option value="all">All</option>
+              <option value="critical">Critical</option>
+              <option value="indonesia">Indonesia</option>
+            </select>
+          </div>
+          <div class="feed-list" id="feed-list"></div>
+        </section>
+      </aside>
+    </main>
+  </div>
+
+  <div class="command-palette" id="command-palette" hidden>
+    <button class="command-backdrop" id="command-backdrop"></button>
+    <div class="command-dialog">
+      <p class="eyebrow">COMMAND PALETTE</p>
+      <h2>Quick Actions</h2>
+      <input id="command-input" type="search" placeholder="Ketik perintah...">
+      <div class="command-list" id="command-list"></div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
