@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07111f">
+  <meta name="description" content="NusaMonitor Indonesia Live - dashboard situational awareness Indonesia berbasis data publik nyata.">
+  <title>NusaMonitor Indonesia Live</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="preconnect" href="https://unpkg.com">
+  <link rel="preconnect" href="https://basemaps.cartocdn.com">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <noscript><div class="noscript">JavaScript harus aktif untuk menjalankan NusaMonitor.</div></noscript>
+  <div class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <button id="menuButton" class="menu-button" aria-label="Buka menu">☰</button>
+        <div class="brand-mark">N</div>
+        <div><h1>NusaMonitor</h1><p>INDONESIA LIVE INTELLIGENCE</p></div>
+      </div>
+      <label class="search"><span>⌕</span><input id="searchInput" type="search" placeholder="Cari lokasi, gempa, laporan, atau berita..."><kbd>/</kbd></label>
+      <div class="live-status"><span class="live-dot"></span><span id="systemStatus">CONNECTING</span><strong id="clock">00:00:00</strong><button id="refreshButton" title="Refresh">↻</button></div>
+    </header>
+
+    <aside id="sidebar" class="sidebar">
+      <p class="side-title">LIVE DATA LAYERS</p>
+      <nav id="layerNav" class="layer-nav">
+        <button class="active" data-layer="overview"><span>◎</span>Overview <b id="countOverview">0</b></button>
+        <button data-layer="earthquake"><span>◉</span>Gempa BMKG <b id="countEarthquake">0</b></button>
+        <button data-layer="disaster"><span>△</span>Laporan Bencana <b id="countDisaster">0</b></button>
+        <button data-layer="weather-alert"><span>⚡</span>Peringatan Cuaca <b id="countAlert">0</b></button>
+      </nav>
+
+      <section class="side-section">
+        <div class="section-label">PERIODE LAPORAN</div>
+        <select id="periodSelect"><option value="21600">6 jam</option><option value="86400" selected>24 jam</option><option value="259200">3 hari</option><option value="604800">7 hari</option></select>
+      </section>
+
+      <section class="side-section">
+        <div class="section-label">WEATHER ADM4</div>
+        <form id="weatherForm">
+          <input id="adm4Input" value="31.71.03.1001" aria-label="Kode ADM4" pattern="\d{2}\.\d{2}\.\d{2}\.\d{4}">
+          <button>LOAD</button>
+        </form>
+        <small>Contoh resmi BMKG: 31.71.03.1001</small>
+      </section>
+
+      <section class="side-section">
+        <div class="section-label">SOURCE HEALTH</div>
+        <div id="sourceHealth" class="source-health"></div>
+      </section>
+
+      <footer><span>MRP INTELLIGENCE LAB</span><span>LIVE v1.0</span></footer>
+    </aside>
+
+    <main class="workspace">
+      <section class="map-panel">
+        <div id="map"></div>
+        <div class="map-heading"><div><span>INDONESIA SITUATIONAL MAP</span><h2 id="layerTitle">Live Overview</h2></div><div class="map-metrics"><b id="visibleCount">0</b> signals <b id="sourceCount">0</b> sources</div></div>
+        <div class="map-actions"><button id="fitIndonesia">Indonesia</button><button id="fitSignals">Fit Signals</button></div>
+        <article id="detailCard" class="detail-card" hidden><button id="closeDetail">×</button><span id="detailType"></span><h3 id="detailTitle"></h3><p id="detailDescription"></p><div id="detailMeta"></div></article>
+      </section>
+
+      <aside class="intel-panel">
+        <section class="metrics-grid">
+          <article><span>Gempa</span><strong id="metricEarthquakes">0</strong><small>BMKG live feed</small></article>
+          <article><span>Laporan</span><strong id="metricReports">0</strong><small>PetaBencana</small></article>
+          <article><span>Alerts</span><strong id="metricAlerts">0</strong><small>BMKG nowcast</small></article>
+          <article><span>News</span><strong id="metricNews">0</strong><small>GDELT</small></article>
+        </section>
+
+        <section class="intel-section">
+          <div class="section-head"><div><span>LIVE SUMMARY</span><h2>Situation Brief</h2></div><em id="lastUpdate">--</em></div>
+          <p id="situationBrief" class="brief">Menghubungkan ke sumber data publik...</p>
+        </section>
+
+        <section class="intel-section weather-section">
+          <div class="section-head"><div><span>BMKG FORECAST</span><h2 id="weatherLocation">Prakiraan Cuaca</h2></div></div>
+          <div id="weatherContent" class="weather-content"><p>Masukkan kode ADM4 untuk mengambil prakiraan nyata BMKG.</p></div>
+        </section>
+
+        <section class="intel-section stream-section">
+          <div class="section-head"><div><span>INTELLIGENCE STREAM</span><h2>Latest Indonesia Signals</h2></div><select id="streamFilter"><option value="all">All</option><option value="earthquake">Gempa</option><option value="disaster">Bencana</option><option value="weather-alert">Cuaca</option><option value="news">Berita</option></select></div>
+          <div id="stream" class="stream"></div>
+        </section>
+      </aside>
+    </main>
+  </div>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="/app.js" defer></script>
+</body>
+</html>
